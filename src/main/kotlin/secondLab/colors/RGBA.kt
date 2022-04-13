@@ -14,6 +14,6 @@ data class RGBA(
     }
 
     override fun toString(): String {
-        return "Colors and transparency: R $red, G $blue, B $green, Alpha $alpha"
+        return "R $red, G $blue, B $green, Alpha $alpha"
     }
 }

@@ -23,7 +23,7 @@ class Circle(
     }
 
     override fun toString(): String {
-        return "This circle has radius: $radius; border color: $border; fill color: $fillColor; area: $shapeArea"
+        return "[This circle has radius: $radius; border color: $border; fill color: $fillColor; area: $shapeArea]"
     }
 
 }

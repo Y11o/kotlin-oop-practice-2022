@@ -34,7 +34,7 @@ class Triangle(
     }
 
     override fun toString(): String {
-        return "This triangle has sides: $firstSide, $secondSide, $thirdSide; border color: $border; fill color: $fillColor; area: $shapeArea"
+        return "[This triangle has sides: $firstSide, $secondSide, $thirdSide; border color: $border; fill color: $fillColor; area: $shapeArea]"
     }
 
 }

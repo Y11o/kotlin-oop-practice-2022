@@ -27,7 +27,7 @@ class Rectangle(
     }
 
     override fun toString(): String {
-        return "This rectangle has sides: $firstSide, $secondSide; border color: $border; fill color: $fillColor; area: $shapeArea"
+        return "[This rectangle has sides: $firstSide, $secondSide; border color: $border; fill color: $fillColor; area: $shapeArea]"
     }
 
 }

@@ -24,7 +24,7 @@ class Square(
     }
 
     override fun toString(): String {
-        return "This square has side: $side; border color: $border; fill color: $fillColor; area: $shapeArea"
+        return "[This square has side: $side; border color: $border; fill color: $fillColor; area: $shapeArea]"
     }
 
 }
