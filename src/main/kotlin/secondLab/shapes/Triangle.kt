@@ -24,7 +24,7 @@ class Triangle(
     init {
         border = _border.copy()
         fillColor = _fillColor.copy()
-        if (_firstSide > 0 && _secondSide > 0 && _thirdSide > 0) {
+        if (_firstSide > 0 && _secondSide > 0 && _thirdSide > 0 && _firstSide + _secondSide > _thirdSide && _secondSide + _thirdSide > _firstSide && _firstSide + _thirdSide > _secondSide) {
             firstSide = _firstSide
             secondSide = _secondSide
             thirdSide = _thirdSide

@@ -1,6 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="MainKt" type="JetRunConfigurationType" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="MainKt" />
+    <option name="ALTERNATIVE_JRE_PATH" value="15" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="MAIN_CLASS_NAME" value="secondLab.MainKt" />
     <module name="kotlin-oop-practice-2022.main" />
     <shortenClasspath name="NONE" />
     <method v="2">
