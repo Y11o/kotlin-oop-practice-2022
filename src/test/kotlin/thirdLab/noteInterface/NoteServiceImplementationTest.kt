@@ -48,7 +48,7 @@ internal class NoteServiceImplementationTest {
         noteList.addToNoteLibrary(task2)
         noteList.addToNoteLibrary(textNote)
         noteList.addToNoteLibrary(linkNote)
-        assertEquals(listOf<Note>(buyProducts, task2, textNote, linkNote), noteList.getAllNotes())
+        assertEquals(listOf(buyProducts, task2, textNote, linkNote), noteList.getAllNotes())
     }
 
     @Test
@@ -88,9 +88,9 @@ internal class NoteServiceImplementationTest {
         noteList.addToNoteLibrary(task2)
         noteList.addToNoteLibrary(textNote)
         noteList.addToNoteLibrary(linkNote)
-        assertEquals(listOf<Note>(buyProducts, task2, textNote, linkNote), noteList.getAllNotes())
+        assertEquals(listOf(buyProducts, task2, textNote, linkNote), noteList.getAllNotes())
         noteList.removeFromNoteLibrary(task2)
-        assertEquals(listOf<Note>(buyProducts, textNote, linkNote), noteList.getAllNotes())
+        assertEquals(listOf(buyProducts, textNote, linkNote), noteList.getAllNotes())
     }
 
     @Test
@@ -117,7 +117,7 @@ internal class NoteServiceImplementationTest {
         noteList.addToNoteLibrary(task2)
         noteList.addToNoteLibrary(textNote)
         noteList.addToNoteLibrary(linkNote)
-        assertEquals(listOf<Note>(buyProducts, task2, textNote, linkNote), noteList.getSortedByDate())
+        assertEquals(listOf(buyProducts, task2, textNote, linkNote), noteList.getSortedByDate())
     }
 
     @Test
@@ -126,6 +126,6 @@ internal class NoteServiceImplementationTest {
         noteList.addToNoteLibrary(task2)
         noteList.addToNoteLibrary(textNote)
         noteList.addToNoteLibrary(linkNote)
-        assertEquals(listOf<Note>(linkNote, task2, buyProducts, textNote), noteList.getSortedByTitle())
+        assertEquals(listOf(linkNote, task2, buyProducts, textNote), noteList.getSortedByTitle())
     }
 }
