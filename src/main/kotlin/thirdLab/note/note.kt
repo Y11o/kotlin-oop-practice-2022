@@ -16,9 +16,9 @@ sealed class Note(
         _creationDate: LocalDateTime
     ) : Note(_title, _body, _creationDate){
         override fun toString(): String {
-            return "Title: $title" +
-                    "Note: $body" +
-                    "Date: $creationDate"
+            return "\nTitle: $title\n" +
+                    "Note: $body\n" +
+                    "Date: $creationDate\n"
         }
     }
 
@@ -29,10 +29,10 @@ sealed class Note(
         private var deadLine: LocalDateTime
     ) : Note(_title, null, _creationDate){
         override fun toString(): String {
-            return "Title: $title" +
-                    "Task: $task" +
-                    "Date: $creationDate" +
-                    "Deadline: $deadLine"
+            return "\nTitle: $title\n" +
+                    "Task: $task\n" +
+                    "Date: $creationDate\n" +
+                    "Deadline: $deadLine\n"
         }
     }
 
@@ -43,10 +43,10 @@ sealed class Note(
         _creationDate: LocalDateTime
     ) : Note(_title, _body, _creationDate){
         override fun toString(): String {
-            return "Title: $title" +
-                    "Note: $body" +
-                    "Link: $link" +
-                    "Date: $creationDate"
+            return "\nTitle: $title\n" +
+                    "Note: $body\n" +
+                    "Link: $link\n" +
+                    "Date: $creationDate\n"
         }
     }
 
