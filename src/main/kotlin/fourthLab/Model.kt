@@ -63,8 +63,8 @@ class Model(private val mazeMap: MutableList<MutableList<Field>>) {
 
     private fun moveFlag(i: Int, j: Int) {
         if (isCellEmpty(i, j)) {
-            mazeMap[currY][currX] = Field.EMPTY
             state = (mazeMap[i][j] == Field.FINISH)
+            mazeMap[currY][currX] = Field.EMPTY
             mazeMap[i][j] = Field.PLAYER
             currY = i
             currX = j
@@ -76,10 +76,10 @@ class Model(private val mazeMap: MutableList<MutableList<Field>>) {
     fun doMove(currMove: Movement) {
         require(!state) { "Game was finished" }
         when (currMove) {
-            Movement.UP -> moveFlag(currY--, currX)
-            Movement.DOWN -> moveFlag(currY++, currX)
-            Movement.LEFT -> moveFlag(currY, currX--)
-            Movement.RIGHT -> moveFlag(currY, currX++)
+            Movement.UP -> moveFlag(--currY, currX)
+            Movement.DOWN -> moveFlag(++currY, currX)
+            Movement.LEFT -> moveFlag(currY, --currX)
+            Movement.RIGHT -> moveFlag(currY, ++currX)
             Movement.DO_NOTHING -> moveFlag(currY, currX)
         }
         notifyListeners()
