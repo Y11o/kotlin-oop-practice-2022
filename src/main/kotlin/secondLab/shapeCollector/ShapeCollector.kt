@@ -10,25 +10,19 @@ class ShapeCollector(_listOfShapes: List<ColoredShape2d>) {
         listOfShapes = _listOfShapes.toMutableList()
     }
 
-    fun addShape (shape: ColoredShape2d) = listOfShapes.add(shape)
+    fun addShape(shape: ColoredShape2d) = listOfShapes.add(shape)
 
-    fun findMinArea (): List<ColoredShape2d>{
-        if (listOfShapes.isNotEmpty()){
-            return listOfShapes.filter { it.shapeArea == listOfShapes.minOf { it1 -> it1.shapeArea } }
-        }
-        return emptyList()
+    fun findMinArea(): List<ColoredShape2d> {
+        return listOfShapes.filter { it.shapeArea == listOfShapes.minOf { it1 -> it1.shapeArea } }
     }
 
-    fun findMaxArea(): List<ColoredShape2d>{
-        if (listOfShapes.isNotEmpty()){
-            return listOfShapes.filter { it.shapeArea == listOfShapes.maxOf { it1 -> it1.shapeArea } }
-        }
-        return emptyList()
+    fun findMaxArea(): List<ColoredShape2d> {
+        return listOfShapes.filter { it.shapeArea == listOfShapes.maxOf { it1 -> it1.shapeArea } }
     }
 
-    fun areaSum(): Double{
+    fun areaSum(): Double {
         var areaSum = 0.0
-        for (shape in listOfShapes){
+        for (shape in listOfShapes) {
             areaSum += shape.shapeArea
         }
         return areaSum
@@ -48,5 +42,5 @@ class ShapeCollector(_listOfShapes: List<ColoredShape2d>) {
 
     fun groupByFillColor(): Map<RGBA, List<ColoredShape2d>> = listOfShapes.groupBy { it.fillColor }
 
-    fun groupByType(): Map<Class<Any>, List<ColoredShape2d>> = listOfShapes.groupBy { it.javaClass }
+    fun getByType(shape: ColoredShape2d): List<ColoredShape2d> = listOfShapes.filter { it.javaClass == shape.javaClass }
 }

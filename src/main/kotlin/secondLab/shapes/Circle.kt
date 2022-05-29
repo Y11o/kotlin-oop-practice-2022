@@ -4,20 +4,17 @@ import secondLab.`interface`.ColoredShape2d
 import secondLab.colors.RGBA
 import kotlin.math.PI
 
-class Circle(
-    _radius: Double,
-    _border: RGBA,
-    _fillColor: RGBA
-):ColoredShape2d {
-    private val radius: Double
-    override val border: RGBA
-    override val fillColor: RGBA
+data class Circle(
+    val radius: Double,
+    override val border: RGBA,
+    override val fillColor: RGBA,
+) : ColoredShape2d {
+
     override val shapeArea: Double
         get() = PI * radius * radius
+
     init {
-        border = _border.copy()
-        fillColor = _fillColor.copy()
-        if (_radius > 0) {radius = _radius}else {
+        if (radius <= 0) {
             throw java.lang.IllegalArgumentException("Radius should be greater than 0")
         }
     }

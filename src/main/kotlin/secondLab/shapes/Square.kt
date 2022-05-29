@@ -3,22 +3,17 @@ package secondLab.shapes
 import secondLab.`interface`.ColoredShape2d
 import secondLab.colors.RGBA
 
-class Square(
-    _side: Double,
-    _border: RGBA,
-    _fillColor: RGBA
-): ColoredShape2d {
-    private val side: Double
-    override val border: RGBA
+data class Square(
+    val side: Double,
+    override val border: RGBA,
     override val fillColor: RGBA
+) : ColoredShape2d {
+
     override val shapeArea: Double
         get() = side * side
+
     init {
-        border = _border.copy()
-        fillColor = _fillColor.copy()
-        if (_side > 0) {
-            side = _side
-        }else {
+        if (side < 0) {
             throw java.lang.IllegalArgumentException("Side should be greater than 0")
         }
     }

@@ -3,7 +3,9 @@ package secondLab.shapeCollector
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import org.w3c.dom.css.RGBColor
 import secondLab.colors.RGBA
+import secondLab.`interface`.ColoredShape2d
 import secondLab.shapes.Circle
 import secondLab.shapes.Rectangle
 import secondLab.shapes.Square
@@ -15,7 +17,7 @@ internal class ShapeCollectorTest {
     private val colorGreen = RGBA(0.0, 255.0, 0.0, 1.0)
     private val colorBlue = RGBA(0.0, 0.0, 255.0, 1.0)
 
-    private val circle = Circle(5.0,colorRed, colorBlue)
+    private val circle = Circle(5.0, colorRed, colorBlue)
     private val anotherCircle = Circle(6.0, colorGreen, colorBlue)
     private val triangle = Triangle(4.0, 3.0, 5.0, colorRed, colorBlue)
     private val rectangle = Rectangle(3.0, 2.0, colorGreen, colorRed)
@@ -29,17 +31,21 @@ internal class ShapeCollectorTest {
         assertEquals(listOf(circle, anotherCircle, triangle, rectangle), shapeCollection.getListOfShapes())
         shapeCollection.addShape(square)
         shapeCollection.addShape(anotherSquare)
-        assertEquals(listOf(circle, anotherCircle, triangle, rectangle, square, anotherSquare), shapeCollection.getListOfShapes())
+        assertEquals(
+            listOf(circle, anotherCircle, triangle, rectangle, square, anotherSquare),
+            shapeCollection.getListOfShapes()
+        )
     }
 
     @Test
+
     fun findMinArea() {
-        assertEquals("[[This triangle has sides: 4.0, 3.0, 5.0; border color: R 255.0, G 0.0, B 0.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 6.0], [This rectangle has sides: 3.0, 2.0; border color: R 0.0, G 0.0, B 255.0, Alpha 1.0; fill color: R 255.0, G 0.0, B 0.0, Alpha 1.0; area: 6.0]]", "${shapeCollection.findMinArea()}")
+        assertEquals(listOf(triangle, rectangle), shapeCollection.findMinArea())
     }
 
     @Test
     fun findMaxArea() {
-        assertEquals("[[This circle has radius: 6.0; border color: R 0.0, G 0.0, B 255.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 113.09733552923255]]", "${shapeCollection.findMaxArea()}")
+        assertEquals(listOf(anotherCircle), shapeCollection.findMaxArea())
     }
 
     @Test
@@ -49,17 +55,17 @@ internal class ShapeCollectorTest {
 
     @Test
     fun borderColorFilter() {
-       assertEquals("[[This circle has radius: 5.0; border color: R 255.0, G 0.0, B 0.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 78.53981633974483], [This triangle has sides: 4.0, 3.0, 5.0; border color: R 255.0, G 0.0, B 0.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 6.0]]", "${shapeCollection.borderColorFilter(colorRed)}")
+        assertEquals(listOf(anotherCircle, rectangle), shapeCollection.borderColorFilter(colorGreen))
     }
 
     @Test
     fun fillColorFilter() {
-        assertEquals("[[This circle has radius: 5.0; border color: R 255.0, G 0.0, B 0.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 78.53981633974483], [This circle has radius: 6.0; border color: R 0.0, G 0.0, B 255.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 113.09733552923255], [This triangle has sides: 4.0, 3.0, 5.0; border color: R 255.0, G 0.0, B 0.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 6.0]]", "${shapeCollection.fillColorFilter(colorBlue)}")
+        assertEquals(listOf(circle, anotherCircle, triangle), shapeCollection.fillColorFilter(colorBlue))
     }
 
     @Test
     fun getListOfShapes() {
-        assertEquals("[[This circle has radius: 5.0; border color: R 255.0, G 0.0, B 0.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 78.53981633974483], [This circle has radius: 6.0; border color: R 0.0, G 0.0, B 255.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 113.09733552923255], [This triangle has sides: 4.0, 3.0, 5.0; border color: R 255.0, G 0.0, B 0.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 6.0], [This rectangle has sides: 3.0, 2.0; border color: R 0.0, G 0.0, B 255.0, Alpha 1.0; fill color: R 255.0, G 0.0, B 0.0, Alpha 1.0; area: 6.0]]", "${shapeCollection.getListOfShapes()}")
+        assertEquals(listOf(circle, anotherCircle, triangle, rectangle), shapeCollection.getListOfShapes())
     }
 
     @Test
@@ -69,16 +75,27 @@ internal class ShapeCollectorTest {
 
     @Test
     fun groupByBorderColor() {
-        assertEquals("{R 255.0, G 0.0, B 0.0, Alpha 1.0=[[This circle has radius: 5.0; border color: R 255.0, G 0.0, B 0.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 78.53981633974483], [This triangle has sides: 4.0, 3.0, 5.0; border color: R 255.0, G 0.0, B 0.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 6.0]], R 0.0, G 0.0, B 255.0, Alpha 1.0=[[This circle has radius: 6.0; border color: R 0.0, G 0.0, B 255.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 113.09733552923255], [This rectangle has sides: 3.0, 2.0; border color: R 0.0, G 0.0, B 255.0, Alpha 1.0; fill color: R 255.0, G 0.0, B 0.0, Alpha 1.0; area: 6.0]]}", "${shapeCollection.groupByBorderColor()}")
+        val map = mutableMapOf(
+            RGBA(255.0, 0.0, 0.0, 1.0) to listOf(circle, triangle),
+            RGBA(0.0, 0.0, 255.0, 1.0) to listOf(anotherCircle, rectangle)
+        )
+        assertEquals(map.toString(), shapeCollection.groupByBorderColor())
     }
 
     @Test
     fun groupByFillColor() {
-        assertEquals("{R 0.0, G 255.0, B 0.0, Alpha 1.0=[[This circle has radius: 5.0; border color: R 255.0, G 0.0, B 0.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 78.53981633974483], [This circle has radius: 6.0; border color: R 0.0, G 0.0, B 255.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 113.09733552923255], [This triangle has sides: 4.0, 3.0, 5.0; border color: R 255.0, G 0.0, B 0.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 6.0]], R 255.0, G 0.0, B 0.0, Alpha 1.0=[[This rectangle has sides: 3.0, 2.0; border color: R 0.0, G 0.0, B 255.0, Alpha 1.0; fill color: R 255.0, G 0.0, B 0.0, Alpha 1.0; area: 6.0]]}", "${shapeCollection.groupByFillColor()}")
+        val mapFill = mutableMapOf(
+            RGBA(0.0, 0.0, 255.0, 1.0) to listOf(circle, anotherCircle, triangle),
+            RGBA(255.0, 0.0, 0.0, 1.0) to listOf(rectangle)
+        )
+        assertEquals(mapFill.toString(), shapeCollection.groupByFillColor())
     }
 
     @Test
     fun groupByType() {
-        assertEquals("{class secondLab.shapes.Circle=[[This circle has radius: 5.0; border color: R 255.0, G 0.0, B 0.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 78.53981633974483], [This circle has radius: 6.0; border color: R 0.0, G 0.0, B 255.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 113.09733552923255]], class secondLab.shapes.Triangle=[[This triangle has sides: 4.0, 3.0, 5.0; border color: R 255.0, G 0.0, B 0.0, Alpha 1.0; fill color: R 0.0, G 255.0, B 0.0, Alpha 1.0; area: 6.0]], class secondLab.shapes.Rectangle=[[This rectangle has sides: 3.0, 2.0; border color: R 0.0, G 0.0, B 255.0, Alpha 1.0; fill color: R 255.0, G 0.0, B 0.0, Alpha 1.0; area: 6.0]]}", "${shapeCollection.groupByType()}")
+        val map = mutableMapOf(
+            javaClass to listOf(circle, anotherCircle)
+        )
+        assertEquals(map.toString(), shapeCollection.getByType(circle))
     }
 }

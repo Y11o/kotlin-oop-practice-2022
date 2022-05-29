@@ -5,7 +5,7 @@ data class RGBA(
     val green: Double,
     val blue: Double,
     val alpha: Double
-){
+) {
     init {
         if (red < 0.0 || red > 255.0) throw error("Red color should be initialised in range 0.0..255.0")
         if (green < 0.0 || green > 255.0) throw error("Green color should be initialised in range 0.0..255.0")

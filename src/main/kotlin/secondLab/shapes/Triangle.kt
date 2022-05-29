@@ -4,31 +4,24 @@ import secondLab.`interface`.ColoredShape2d
 import secondLab.colors.RGBA
 import kotlin.math.sqrt
 
-class Triangle(
-    _firstSide: Double,
-    _secondSide: Double,
-    _thirdSide: Double,
-    _border: RGBA,
-    _fillColor: RGBA
-):ColoredShape2d {
-    private val firstSide: Double
-    private val secondSide: Double
-    private val thirdSide: Double
-    override val border: RGBA
+data class Triangle(
+    val firstSide: Double,
+    val secondSide: Double,
+    val thirdSide: Double,
+    override val border: RGBA,
     override val fillColor: RGBA
+) : ColoredShape2d {
+
     override val shapeArea: Double
-        get(){
+        get() {
             val halfOfSum = (firstSide + secondSide + thirdSide) / 2
             return sqrt(halfOfSum * (halfOfSum - firstSide) * (halfOfSum - secondSide) * (halfOfSum - thirdSide))
         }
+
     init {
-        border = _border.copy()
-        fillColor = _fillColor.copy()
-        if (_firstSide > 0 && _secondSide > 0 && _thirdSide > 0 && _firstSide + _secondSide > _thirdSide && _secondSide + _thirdSide > _firstSide && _firstSide + _thirdSide > _secondSide) {
-            firstSide = _firstSide
-            secondSide = _secondSide
-            thirdSide = _thirdSide
-        }else {
+        if (firstSide < 0 || secondSide < 0 || thirdSide < 0 || firstSide + secondSide < thirdSide ||
+            secondSide + thirdSide < firstSide || firstSide + thirdSide < secondSide
+        ) {
             throw java.lang.IllegalArgumentException("Sides should be greater than 0")
         }
     }
