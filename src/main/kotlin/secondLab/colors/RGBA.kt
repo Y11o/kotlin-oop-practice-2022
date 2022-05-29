@@ -16,4 +16,19 @@ data class RGBA(
     override fun toString(): String {
         return "R $red, G $blue, B $green, Alpha $alpha"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (this.javaClass != other?.javaClass) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = red.hashCode()
+        result = 31 * result + green.hashCode()
+        result = 31 * result + blue.hashCode()
+        result = 31 * result + alpha.hashCode()
+        return result
+    }
 }

@@ -3,9 +3,7 @@ package secondLab.shapeCollector
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
-import org.w3c.dom.css.RGBColor
 import secondLab.colors.RGBA
-import secondLab.`interface`.ColoredShape2d
 import secondLab.shapes.Circle
 import secondLab.shapes.Rectangle
 import secondLab.shapes.Square
@@ -75,27 +73,24 @@ internal class ShapeCollectorTest {
 
     @Test
     fun groupByBorderColor() {
+        val anotherShapeCollection = ShapeCollector(listOf(circle, triangle))
         val map = mutableMapOf(
-            RGBA(255.0, 0.0, 0.0, 1.0) to listOf(circle, triangle),
-            RGBA(0.0, 0.0, 255.0, 1.0) to listOf(anotherCircle, rectangle)
+            colorRed to listOf(circle, triangle),
         )
-        assertEquals(map.toString(), shapeCollection.groupByBorderColor())
+        assertEquals(map.toString(), anotherShapeCollection.groupByBorderColor().toString())
     }
 
     @Test
     fun groupByFillColor() {
         val mapFill = mutableMapOf(
-            RGBA(0.0, 0.0, 255.0, 1.0) to listOf(circle, anotherCircle, triangle),
-            RGBA(255.0, 0.0, 0.0, 1.0) to listOf(rectangle)
+            colorGreen to listOf(circle, anotherCircle, triangle),
+            colorRed to listOf(rectangle)
         )
-        assertEquals(mapFill.toString(), shapeCollection.groupByFillColor())
+        assertEquals(mapFill.toString(), shapeCollection.groupByFillColor().toString())
     }
 
     @Test
-    fun groupByType() {
-        val map = mutableMapOf(
-            javaClass to listOf(circle, anotherCircle)
-        )
-        assertEquals(map.toString(), shapeCollection.getByType(circle))
+    fun getByType() {
+        assertEquals(listOf(circle, anotherCircle), shapeCollection.getByType(circle))
     }
 }
