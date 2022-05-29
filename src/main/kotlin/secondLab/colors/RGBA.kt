@@ -1,5 +1,8 @@
 package secondLab.colors
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class RGBA(
     val red: Double,
     val green: Double,

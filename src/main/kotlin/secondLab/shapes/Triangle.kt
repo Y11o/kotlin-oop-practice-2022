@@ -4,6 +4,7 @@ import secondLab.`interface`.ColoredShape2d
 import secondLab.colors.RGBA
 import kotlin.math.sqrt
 
+@kotlinx.serialization.Serializable
 data class Triangle(
     val firstSide: Double,
     val secondSide: Double,

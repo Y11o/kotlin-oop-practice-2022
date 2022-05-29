@@ -3,6 +3,7 @@ package secondLab.shapes
 import secondLab.`interface`.ColoredShape2d
 import secondLab.colors.RGBA
 
+@kotlinx.serialization.Serializable
 data class Rectangle(
     val firstSide: Double,
     val secondSide: Double,

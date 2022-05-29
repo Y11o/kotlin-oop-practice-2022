@@ -1,10 +1,12 @@
 package secondLab.shapes
 
+import kotlinx.serialization.Serializable
 import secondLab.`interface`.ColoredShape2d
 import secondLab.colors.RGBA
 import kotlin.math.PI
 
-data class Circle(
+@Serializable
+class Circle(
     val radius: Double,
     override val border: RGBA,
     override val fillColor: RGBA,
