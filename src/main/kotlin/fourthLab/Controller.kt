@@ -22,11 +22,11 @@ class Controller(private val model: Model) {
                             model.writeMazeToFile(fileName)
                             saveGameFlag = true
                             break
-                         }
-                          else -> Movement.DO_NOTHING
+                        }
+                        else -> Movement.DO_NOTHING
                     }
-                }catch (e: Exception) {
-                     println(e.message)
+                } catch (e: Exception) {
+                    println(e.message)
                 }
             }
         }

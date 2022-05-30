@@ -6,15 +6,15 @@ interface ModelChangeListener {
     fun onModelChanged()
 }
 
-enum class Movement(private val textValue: String){
+enum class Movement(private val textValue: String) {
     UP("Up"),
     DOWN("Down"),
     LEFT("Left"),
     RIGHT("Right"),
     DO_NOTHING("");
+
     override fun toString(): String = textValue
 }
-
 
 
 @Serializable
@@ -51,8 +51,7 @@ class Model(private val mazeMap: MutableList<MutableList<Field>>) {
     }
 
     private val listeners: MutableSet<ModelChangeListener> = mutableSetOf()
-    constructor(fileName: String) : this(ModelSerialization.deserializationFromFile(fileName))
-    fun writeMazeToFile(fileName: String) = ModelSerialization.serializationToFile(mazeMap, fileName)
+    fun writeMazeToFile(fileName: String) = ModelSerialization().serializationToFile(mazeMap, fileName)
     fun addModelChangeListener(listener: ModelChangeListener) = listeners.add(listener)
     private fun notifyListeners() = listeners.forEach { it.onModelChanged() }
     fun removeModelChangeListener(listener: ModelChangeListener) = listeners.remove(listener)
@@ -61,10 +60,19 @@ class Model(private val mazeMap: MutableList<MutableList<Field>>) {
     private fun isCellEmpty(i: Int, j: Int) =
         i >= 0 && j >= 0 && i < mazeMap.size && j < mazeMap[0].size && (mazeMap[i][j] == Field.EMPTY || mazeMap[i][j] == Field.FINISH)
 
-    private fun moveFlag(i: Int, j: Int) {
+    private fun moveFlag(i: Int, j: Int, prevCell: String) {
+
         if (isCellEmpty(i, j)) {
+            var prevY = currY
+            var prevX = currX
+            when (prevCell) {
+                "up" -> (prevY++)
+                "down" -> (prevY--)
+                "left" -> (prevX++)
+                "right" -> (prevX--)
+            }
             state = (mazeMap[i][j] == Field.FINISH)
-            mazeMap[currY][currX] = Field.EMPTY
+            mazeMap[prevY][prevX] = Field.EMPTY
             mazeMap[i][j] = Field.PLAYER
             currY = i
             currX = j
@@ -76,17 +84,18 @@ class Model(private val mazeMap: MutableList<MutableList<Field>>) {
     fun doMove(currMove: Movement) {
         require(!state) { "Game was finished" }
         when (currMove) {
-            Movement.UP -> moveFlag(--currY, currX)
-            Movement.DOWN -> moveFlag(++currY, currX)
-            Movement.LEFT -> moveFlag(currY, --currX)
-            Movement.RIGHT -> moveFlag(currY, ++currX)
-            Movement.DO_NOTHING -> moveFlag(currY, currX)
+            Movement.UP -> moveFlag(--currY, currX, "up")
+            Movement.DOWN -> moveFlag(++currY, currX, "down")
+            Movement.LEFT -> moveFlag(currY, --currX, "left")
+            Movement.RIGHT -> moveFlag(currY, ++currX, "right")
+            Movement.DO_NOTHING -> moveFlag(currY, currX, "none")
         }
         notifyListeners()
     }
 
     override fun toString(): String {
-        return buildString {mazeMap.forEach { line ->
+        return buildString {
+            mazeMap.forEach { line ->
                 line.forEach {
                     if (it == Field.PLAYER) append(it)
                     else
