@@ -1,12 +1,12 @@
 package firstLab
 
 class Book(
-    internal val title: String,
-    internal val author: String,
-    internal val publicationDate: Int
+    val title: String,
+    val authors: List<String>,
+    val publicationDate: Int
 ) {
     override fun toString(): String {
-        return "$title, $author, $publicationDate"
+        return "$title, $authors, $publicationDate"
     }
 }
 
@@ -36,7 +36,7 @@ fun parseBooks(books: String): List<Book> {
 private fun bookDeclaration(book: String): Book {
     return Book(
         book.substringBefore("//"),
-        book.substringAfter("//").substringBefore("//"),
+        book.substringAfter("//").substringBefore("//").split(","),
         book.substringAfterLast("//").toInt()
     )
 }
