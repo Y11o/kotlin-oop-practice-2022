@@ -6,7 +6,7 @@ class Book(
     val publicationDate: Int
 ) {
     override fun toString(): String {
-        return "$title, $authors, $publicationDate"
+        return "$title, $authors, $publicationDate; "
     }
 }
 
