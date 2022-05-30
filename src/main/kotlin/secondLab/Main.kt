@@ -32,6 +32,6 @@ fun main() {
     println("Shapes with blue filled: ${shapeCollection.fillColorFilter(colorBlue)}")
     println("Shapes grouped by border color: ${shapeCollection.groupByBorderColor()}")
     println("Shapes grouped by fill color: ${shapeCollection.groupByFillColor()}")
-    println("Shapes groped by type: ${shapeCollection.getByType(circle)}")
+    println("Shapes groped by type: ${shapeCollection.getByType(Circle::class.java)}")
 
 }

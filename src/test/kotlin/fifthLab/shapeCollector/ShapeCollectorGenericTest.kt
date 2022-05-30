@@ -9,8 +9,9 @@ import secondLab.shapes.Square
 import fifthLab.Comparator
 
 import org.junit.jupiter.api.Assertions.*
+import secondLab.shapeCollector.ShapeCollector
 
-internal class ShapeCollectorGenericTest {
+internal class ShapeCollectorTest {
 
     @Test
     fun addAll() {
@@ -25,8 +26,8 @@ internal class ShapeCollectorGenericTest {
         val square = Square(5.0, colorGreen, colorRed)
         val anotherSquare = Square(7.0, colorRed, colorBlue)
 
-        val shapeCollection = ShapeCollectorGeneric(listOf(circle, anotherCircle, triangle))
-        val shapeCollectionToTest = ShapeCollectorGeneric(listOf())
+        val shapeCollection = ShapeCollector(listOf(circle, anotherCircle, triangle))
+        val shapeCollectionToTest = ShapeCollector(listOf())
         shapeCollectionToTest.addAll(shapeCollection.getListOfShapes())
         assertEquals(shapeCollection.getListOfShapes(), shapeCollectionToTest.getListOfShapes())
 
@@ -47,7 +48,7 @@ internal class ShapeCollectorGenericTest {
         val square = Square(5.0, colorGreen, colorRed)
         val anotherSquare = Square(7.0, colorRed, colorBlue)
 
-        val shapeCollection = ShapeCollectorGeneric(listOf(square, triangle, anotherSquare, rectangle))
+        val shapeCollection = ShapeCollector(listOf(square, triangle, anotherSquare, rectangle))
         shapeCollection.getSorted(Comparator())
         val sortedShapes = listOf(triangle, rectangle, square, anotherSquare)
         assertEquals(sortedShapes, shapeCollection.getListOfShapes())

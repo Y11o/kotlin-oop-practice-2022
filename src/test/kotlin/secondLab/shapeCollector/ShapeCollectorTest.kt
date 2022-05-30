@@ -91,6 +91,6 @@ internal class ShapeCollectorTest {
 
     @Test
     fun getByType() {
-        assertEquals(listOf(circle, anotherCircle), shapeCollection.getByType(circle))
+        assertEquals(listOf(circle, anotherCircle), shapeCollection.getByType(Circle::class.java))
     }
 }

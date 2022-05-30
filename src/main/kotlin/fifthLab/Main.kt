@@ -5,7 +5,7 @@ import secondLab.shapes.Circle
 import secondLab.shapes.Triangle
 import secondLab.shapes.Rectangle
 import secondLab.shapes.Square
-import fifthLab.shapeCollector.ShapeCollectorGeneric
+import secondLab.shapeCollector.ShapeCollector
 
 fun main() {
     val colorRed = RGBA(255.0, 0.0, 0.0, 1.0)
@@ -19,7 +19,7 @@ fun main() {
     val square = Square(5.0, colorGreen, colorRed)
     val anotherSquare = Square(7.0, colorRed, colorBlue)
 
-    val shapeCollection = ShapeCollectorGeneric(listOf(circle, anotherCircle, triangle, rectangle))
+    val shapeCollection = ShapeCollector(listOf(circle, anotherCircle, triangle, rectangle))
     println("Shape collection without Squares: ${shapeCollection.getListOfShapes()}")
     shapeCollection.addShape(square)
     shapeCollection.addShape(anotherSquare)
@@ -32,7 +32,7 @@ fun main() {
     println("Shapes with blue filled: ${shapeCollection.fillColorFilter(colorBlue)}")
     println("Shapes grouped by border color: ${shapeCollection.groupByBorderColor()}")
     println("Shapes grouped by fill color: ${shapeCollection.groupByFillColor()}")
-    println("Shapes groped by type: ${shapeCollection.getByType(circle)}")
+    println("Shapes groped by type: ${shapeCollection.getByType(Circle::class.java)}")
     // Checking new function
     println("Shapes sorted by their area: ${shapeCollection.getSorted(Comparator())}")
 }
