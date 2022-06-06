@@ -7,7 +7,7 @@ class Controller(private val model: Model) {
 
     private fun startGame() {
         var saveGameFlag = false
-        while (!model.state && !saveGameFlag) {
+        while (!model.getState() && !saveGameFlag) {
             val input = readln()
             for (i in input.indices) {
                 try {

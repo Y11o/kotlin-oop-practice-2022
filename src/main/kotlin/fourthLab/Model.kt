@@ -18,7 +18,7 @@ enum class Movement(private val textValue: String) {
 
 
 @Serializable
-class Model(private val mazeMap: MutableList<MutableList<Field>>) {
+class Model(private val mazeModel: List<MutableList<Field>>) {
     @Serializable
     enum class Field(private val textValue: String) {
         WALL("#"),
@@ -29,7 +29,12 @@ class Model(private val mazeMap: MutableList<MutableList<Field>>) {
         override fun toString(): String = textValue
     }
 
-    var state: Boolean
+    private var state: Boolean
+    fun getState(): Boolean {
+        return state
+    }
+
+    private val mazeMap: List<MutableList<Field>> = mazeModel
     private var currY: Int
     private var currX: Int
 
@@ -60,16 +65,16 @@ class Model(private val mazeMap: MutableList<MutableList<Field>>) {
     private fun isCellEmpty(i: Int, j: Int) =
         i >= 0 && j >= 0 && i < mazeMap.size && j < mazeMap[0].size && (mazeMap[i][j] == Field.EMPTY || mazeMap[i][j] == Field.FINISH)
 
-    private fun moveFlag(i: Int, j: Int, prevCell: String) {
+    private fun moveFlag(i: Int, j: Int, prevCell: Movement) {
 
         if (isCellEmpty(i, j)) {
             var prevY = currY
             var prevX = currX
             when (prevCell) {
-                "up" -> (prevY++)
-                "down" -> (prevY--)
-                "left" -> (prevX++)
-                "right" -> (prevX--)
+                Movement.UP -> (prevY++)
+                Movement.DOWN -> (prevY--)
+                Movement.LEFT -> (prevX++)
+                Movement.RIGHT -> (prevX--)
             }
             state = (mazeMap[i][j] == Field.FINISH)
             mazeMap[prevY][prevX] = Field.EMPTY
@@ -84,11 +89,11 @@ class Model(private val mazeMap: MutableList<MutableList<Field>>) {
     fun doMove(currMove: Movement) {
         require(!state) { "Game was finished" }
         when (currMove) {
-            Movement.UP -> moveFlag(--currY, currX, "up")
-            Movement.DOWN -> moveFlag(++currY, currX, "down")
-            Movement.LEFT -> moveFlag(currY, --currX, "left")
-            Movement.RIGHT -> moveFlag(currY, ++currX, "right")
-            Movement.DO_NOTHING -> moveFlag(currY, currX, "none")
+            Movement.UP -> moveFlag(--currY, currX, Movement.UP)
+            Movement.DOWN -> moveFlag(++currY, currX, Movement.DOWN)
+            Movement.LEFT -> moveFlag(currY, --currX, Movement.LEFT)
+            Movement.RIGHT -> moveFlag(currY, ++currX, Movement.RIGHT)
+            Movement.DO_NOTHING -> moveFlag(currY, currX, Movement.DO_NOTHING)
         }
         notifyListeners()
     }
