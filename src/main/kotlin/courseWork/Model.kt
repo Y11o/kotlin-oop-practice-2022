@@ -31,7 +31,7 @@ interface ModelChangeListener {
     fun onModelChanged()
 }
 
-class Model {
+/*class Model {
     private val _board: MutableList<MutableList<Field>> = initBoard()
     val board: List<List<Field>>
         get() = _board
@@ -46,6 +46,10 @@ class Model {
 
         }
 
-    }
+    }*/
+
+    ///kdvgfsekgfrsl
+    ///dlkfgrl
+    ///
 
 }
