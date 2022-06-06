@@ -1,0 +1,4 @@
+package courseWork
+
+class Controller {
+}
