@@ -52,11 +52,16 @@ class Model {
     private val role = Array(BOARD_SIZE* BOARD_SIZE+1) { Field.EMPTY }
     private val cellOpen = Array(BOARD_SIZE* BOARD_SIZE + 1) {false}
 
-    private fun checkNum(check: Int): Boolean{
+    private fun checkNumN(check: Int): Boolean{
         return check == 1 || check == 2 || check == 3 || check == 4 || check == 5 || check == 6 || check == 7 || check == 8
     }
 
-    private fun num(check: Int) : Field{
+    private fun checkNumF(check: Field): Boolean {
+        return check == Field.N_ONE || check == Field.N_TWO || check == Field.N_THREE || check == Field.N_FOUR
+                || check == Field.N_FIVE || check == Field.N_SIX || check == Field.N_SEVEN|| check == Field.N_EIGHT
+    }
+
+    private fun num(check: Int): Field {
         if (check == 1) return Field.N_ONE
         if (check == 2) return Field.N_TWO
         if (check == 3) return Field.N_THREE
@@ -113,7 +118,7 @@ class Model {
 
                 var bufMinesNearby = Field.EMPTY
 
-                if (checkNum(MinesNearby) == true) bufMinesNearby = Num(MinesNearby)
+                if (checkNumN(MinesNearby)) bufMinesNearby = num(MinesNearby)
 
                 role[index] = bufMinesNearby
                 MinesNearby = 0
@@ -124,84 +129,87 @@ class Model {
     private fun emptyCell(index: Int){
         cellOpen[index] = true
         if (index - BOARD_SIZE >= 0 && role[index] == Field.EMPTY) { //верхняя полоса
-            if (role[index - BOARD_SIZE] != Field.BOMB && cellOpen[index - BOARD_SIZE] == true) { //если не бомба и не открыта
-                if (checkNum(role[index - BOARD_SIZE])) //если число
+            if (role[index - BOARD_SIZE] != Field.BOMB && cellOpen[index - BOARD_SIZE]) { //если не бомба и не открыта
+                if (checkNumF(role[index - BOARD_SIZE])) //если число
                     cellOpen[index - BOARD_SIZE] = true
                 else {
-                    if (role[index - width_sq] == empty_sq and cellOpen[index - width_sq] == close_cell) //если пустая клетка и она ещё не открыта
-                        cellOpen[index - width_sq] = open_cell //открываем клетку
-                    emptyCell(width_sq, height_sq, index - width_sq)
+                    if (role[index - BOARD_SIZE] == Field.EMPTY && !cellOpen[index - BOARD_SIZE]) //если пустая клетка и она ещё не открыта
+                        cellOpen[index - BOARD_SIZE] = true //открываем клетку
+                    emptyCell(index - BOARD_SIZE)
                 }
             }
-            if (index - width_sq - 1 > 0 and (index - width_sq - 1) % width_sq != width_sq - 1 and arr_check[index - width_sq - 1] != sp_mine and arr_check_open[index - width_sq - 1] == close_cell) { //если не бомба и не открыта
-                if (arr_check[index - width_sq - 1] >= one and arr_check[index - width_sq - 1] <= eight) //если число
-                    arr_check_open[index - width_sq - 1] = open_cell;
+
+            if (index - BOARD_SIZE - 1 > 0 && (index - BOARD_SIZE - 1) % BOARD_SIZE != BOARD_SIZE - 1 && role[index - BOARD_SIZE - 1] != Field.BOMB && !cellOpen[index - BOARD_SIZE - 1]) { //если не бомба и не открыта
+                if (checkNumF(role[index - BOARD_SIZE - 1])) //если число
+                    cellOpen[index - BOARD_SIZE - 1] = true;
                 else {
-                    if (arr_check[index - width_sq - 1] == empty_sq) //если пустая клетка
-                        arr_check_open[index - width_sq - 1] = open_cell; //открываем клетку
-                    empty_cell(width_sq, height_sq, index - width_sq - 1);
+                    if (role[index - BOARD_SIZE - 1] == Field.EMPTY) //если пустая клетка
+                        cellOpen[index - BOARD_SIZE - 1] = true; //открываем клетку
+                    emptyCell(index - BOARD_SIZE - 1);
                 }
             }
-            if (arr_check[index - width_sq + 1] != sp_mine and index - width_sq + 1 < width_sq * height_sq and arr_check_open[index - width_sq + 1] == close_cell and (index - width_sq + 1) % width_sq != 0) { //если не бомба и не открыта
-                if (arr_check[index - width_sq + 1] >= one and arr_check[index - width_sq + 1] <= eight) //если число
-                    arr_check_open[index - width_sq + 1] = open_cell;
+
+            if (role[index - BOARD_SIZE + 1] != Field.BOMB && index - BOARD_SIZE + 1 < BOARD_SIZE * BOARD_SIZE && !cellOpen[index - BOARD_SIZE + 1] && (index - BOARD_SIZE + 1) % BOARD_SIZE != 0) { //если не бомба и не открыта
+                if (checkNumF(role[index - BOARD_SIZE + 1])) //если число
+                    cellOpen[index - BOARD_SIZE + 1] = true;
                 else {
-                    if (arr_check[index - width_sq + 1] == empty_sq) //если пустая клетка
-                        arr_check_open[index - width_sq + 1] = open_cell; //открываем клетку
-                    empty_cell(width_sq, height_sq, index - width_sq + 1);
+                    if (role[index - BOARD_SIZE + 1] == Field.EMPTY) //если пустая клетка
+                        cellOpen[index - BOARD_SIZE + 1] = true; //открываем клетку
+                    emptyCell(index - BOARD_SIZE + 1);
                 }
             }
         }
-        if (index + width_sq < width_sq * height_sq and arr_check[index] == empty_sq) { //нижняя полоса
-            if (arr_check[index + width_sq] != sp_mine and arr_check_open[index + width_sq] == close_cell) { //если не бомба и не открыта
-                if (arr_check[index + width_sq] >= one and arr_check[index + width_sq] <= eight) //если число
-                    arr_check_open[index + width_sq] = open_cell;
+
+        if (index + BOARD_SIZE < BOARD_SIZE * BOARD_SIZE && role[index] == Field.EMPTY) { //нижняя полоса
+            if (role[index + BOARD_SIZE] != Field.BOMB && !cellOpen[index + BOARD_SIZE]) { //если не бомба и не открыта
+                if (checkNumF(role[index + BOARD_SIZE])) //если число
+                    cellOpen[index + BOARD_SIZE] = true;
                 else {
-                    if (arr_check[index + width_sq] == empty_sq) //если пустая клетка
-                        arr_check_open[index + width_sq] = open_cell; //открываем клетку
-                    empty_cell(width_sq, height_sq, index + width_sq);
+                    if (role[index + BOARD_SIZE] == Field.EMPTY) //если пустая клетка
+                        cellOpen[index + BOARD_SIZE] = true; //открываем клетку
+                    emptyCell(index + BOARD_SIZE);
                 }
             }
-            if (arr_check[index + width_sq - 1] != sp_mine and index + width_sq - 1 > 0 and (index + width_sq - 1) % width_sq != width_sq - 1 and arr_check_open[index + width_sq - 1] == close_cell) { //если не бомба и не открыта
-                if (arr_check[index + width_sq - 1] >= one and arr_check[index + width_sq - 1] <= eight) //если число
-                    arr_check_open[index + width_sq - 1] = open_cell;
+            if (role[index + BOARD_SIZE - 1] != Field.BOMB && index + BOARD_SIZE - 1 > 0 && (index + BOARD_SIZE - 1) % BOARD_SIZE != BOARD_SIZE - 1 && !cellOpen[index + BOARD_SIZE - 1]) { //если не бомба и не открыта
+                if (checkNumF(role[index + BOARD_SIZE - 1])) //если число
+                    cellOpen[index + BOARD_SIZE - 1] = true;
                 else {
-                    if (arr_check[index + width_sq - 1] == empty_sq) //если пустая клетка
-                        arr_check_open[index + width_sq - 1] = open_cell; //открываем клетку
-                    empty_cell(width_sq, height_sq, index + width_sq - 1);
+                    if (role[index + BOARD_SIZE - 1] == Field.EMPTY) //если пустая клетка
+                        cellOpen[index + BOARD_SIZE - 1] = true; //открываем клетку
+                    emptyCell(index + BOARD_SIZE - 1);
                 }
             }
-            if (arr_check[index + width_sq + 1] != sp_mine and index + width_sq + 1 < width_sq * height_sq and (index + width_sq + 1) % width_sq != 0 and arr_check_open[index + width_sq + 1] == close_cell) { //если не бомба и не октрыта
-                if (arr_check[index + width_sq + 1] >= one and arr_check[index + width_sq + 1] <= eight) //если число
-                    arr_check_open[index + width_sq + 1] = open_cell;
+            if (role[index + BOARD_SIZE + 1] != Field.BOMB && index + BOARD_SIZE + 1 < BOARD_SIZE * BOARD_SIZE && (index + BOARD_SIZE + 1) % BOARD_SIZE != 0 && !cellOpen[index + BOARD_SIZE + 1]) { //если не бомба и не октрыта
+                if (checkNumF(role[index + BOARD_SIZE + 1])) //если число
+                    cellOpen[index + BOARD_SIZE + 1] = true;
                 else {
-                    if (arr_check[index + width_sq + 1] == empty_sq) //если пустая клетка
-                        arr_check_open[index + width_sq + 1] = open_cell; //открываем клетку
-                    empty_cell(width_sq, height_sq, index + width_sq + 1);
+                    if (role[index + BOARD_SIZE + 1] == Field.EMPTY) //если пустая клетка
+                        cellOpen[index + BOARD_SIZE + 1] = true; //открываем клетку
+                    emptyCell(index + BOARD_SIZE + 1);
                 }
             }
         }
-        if (index - 1 > 0 and (index - 1) % width_sq != width_sq - 1 and arr_check[index] == empty_sq) { //левая полоса
-            if (arr_check[index - 1] != sp_mine and arr_check_open[index - 1] == close_cell) //если не бомба и не открыта
+        if (index - 1 > 0 && (index - 1) % BOARD_SIZE != BOARD_SIZE - 1 && role[index] == Field.EMPTY) { //левая полоса
+            if (role[index - 1] != Field.BOMB && !cellOpen[index - 1]) //если не бомба и не открыта
             {
-                if (arr_check[index - 1] >= one and arr_check[index - 1] <= eight) //если число
-                    arr_check_open[index - 1] = open_cell;
+                if (checkNumF(role[index - 1])) //если число
+                    cellOpen[index - 1] = true;
                 else {
-                    if (arr_check[index - 1] == empty_sq) //если пустая клетка
-                        arr_check_open[index - 1] = open_cell; //открываем клетку
-                    empty_cell(width_sq, height_sq, index - 1);
+                    if (role[index - 1] == Field.EMPTY) //если пустая клетка
+                        cellOpen[index - 1] = true; //открываем клетку
+                    emptyCell(index - 1);
                 }
             }
         }
-        if (index + 1 < width_sq * height_sq and (index + 1) % width_sq != 0 and arr_check[index] == empty_sq) { //правая полоса
-            if (arr_check[index + 1] != sp_mine and arr_check_open[index + 1] == close_cell) //если не бомба и не открыта
+        if (index + 1 < BOARD_SIZE * BOARD_SIZE && (index + 1) % BOARD_SIZE != 0 && role[index] == Field.EMPTY) { //правая полоса
+            if (role[index + 1] != Field.BOMB && !cellOpen[index + 1]) //если не бомба и не открыта
             {
-                if (arr_check[index + 1] >= one and arr_check[index + 1] <= eight) //если число
-                    arr_check_open[index + 1] = open_cell;
+                if (checkNumF(role[index + 1])) //если число
+                    cellOpen[index + 1] = true;
                 else {
-                    if (arr_check[index + 1] == empty_sq) //если пустая клетка
-                        arr_check_open[index + 1] = open_cell; //открываем клетку
-                    empty_cell(width_sq, height_sq, index + 1);
+                    if (role[index + 1] == Field.EMPTY) //если пустая клетка
+                        cellOpen[index + 1] = true; //открываем клетку
+                    emptyCell(index + 1);
                 }
             }
         }
