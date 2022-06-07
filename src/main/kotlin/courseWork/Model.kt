@@ -1,6 +1,6 @@
 package courseWork
 
-enum class Field(private val textValue: String){
+enum class Field(private val textValue: String) {
     BOMB("U+1F4A3"),
     EMPTY(" "),
     FLAG("U+1F6A9"),
@@ -14,7 +14,7 @@ enum class Field(private val textValue: String){
     N_EIGHT("TODO")
 }
 
-enum class GameState(private val textValue: String){
+enum class State(private val textValue: String) {
     WIN("U+1F973"),
     MOVE_MODE("U+1F600"),
     LOSE("U+1F92F"),
@@ -23,19 +23,16 @@ enum class GameState(private val textValue: String){
 
 const val TOTAL_BOMBS = 10
 const val BOARD_SIZE = 10
-private val FIRST_MOVE = GameState.MOVE_MODE
+private val FIRST_MOVE = State.MOVE_MODE
 
-val GAME_NOT_FINISHED = setOf(GameState.MOVE_MODE, GameState.FLAG_MODE)
+val GAME_NOT_FINISHED = setOf(State.MOVE_MODE, State.FLAG_MODE)
 
 interface ModelChangeListener {
     fun onModelChanged()
 }
 
 class Model {
-    private val _board: MutableList<MutableList<Field>> = initBoard()
-    val board: List<List<Field>>
-        get() = _board
-    private val listeners:  MutableSet<ModelChangeListener> = mutableSetOf()
+    private val listeners: MutableSet<ModelChangeListener> = mutableSetOf()
 
     fun addModelChangeListener(listener: ModelChangeListener) {
         listeners.add(listener)
@@ -49,16 +46,16 @@ class Model {
         listeners.forEach { it.onModelChanged() }
     }
 
-    private val role = Array(BOARD_SIZE* BOARD_SIZE+1) { Field.EMPTY }
-    private val cellOpen = Array(BOARD_SIZE* BOARD_SIZE + 1) {false}
+    private val role = Array(BOARD_SIZE * BOARD_SIZE + 1) { Field.EMPTY }
+    private val cellOpen = Array(BOARD_SIZE * BOARD_SIZE + 1) { false }
 
-    private fun checkNumN(check: Int): Boolean{
+    private fun checkNumN(check: Int): Boolean {
         return check == 1 || check == 2 || check == 3 || check == 4 || check == 5 || check == 6 || check == 7 || check == 8
     }
 
     private fun checkNumF(check: Field): Boolean {
         return check == Field.N_ONE || check == Field.N_TWO || check == Field.N_THREE || check == Field.N_FOUR
-                || check == Field.N_FIVE || check == Field.N_SIX || check == Field.N_SEVEN|| check == Field.N_EIGHT
+                || check == Field.N_FIVE || check == Field.N_SIX || check == Field.N_SEVEN || check == Field.N_EIGHT
     }
 
     private fun num(check: Int): Field {
@@ -70,16 +67,16 @@ class Model {
         if (check == 6) return Field.N_SIX
         if (check == 7) return Field.N_SEVEN
         if (check == 8) return Field.N_EIGHT
+        return Field.EMPTY
     }
 
-    private fun mine(){ //функция закладывания бомб и подсчёта рядом лежащих бомб
+    private fun mine() { //функция закладывания бомб и подсчёта рядом лежащих бомб
         var cntMine = 0
         var positionMine: Int
 
-        while (cntMine < TOTAL_BOMBS){
-            positionMine = (1 until BOARD_SIZE* BOARD_SIZE).random()
-            if (role[positionMine] != Field.BOMB)
-            {
+        while (cntMine < TOTAL_BOMBS) {
+            positionMine = (1 until BOARD_SIZE * BOARD_SIZE).random()
+            if (role[positionMine] != Field.BOMB) {
                 role[positionMine] = Field.BOMB
                 cntMine++
             }
@@ -87,24 +84,24 @@ class Model {
 
         var MinesNearby = 0
 
-        for(index in 0 until BOARD_SIZE* BOARD_SIZE){
-            if (role[index] != Field.BOMB){
+        for (index in 0 until BOARD_SIZE * BOARD_SIZE) {
+            if (role[index] != Field.BOMB) {
 
                 if (index - BOARD_SIZE >= 0) { //верхняя полоса
                     if (role[index - BOARD_SIZE] == Field.BOMB)
                         MinesNearby++
-                    if (index - BOARD_SIZE - 1 > 0 && role[index - BOARD_SIZE - 1] == Field.BOMB && (index - BOARD_SIZE - 1) % BOARD_SIZE != BOARD_SIZE-1)
+                    if (index - BOARD_SIZE - 1 > 0 && role[index - BOARD_SIZE - 1] == Field.BOMB && (index - BOARD_SIZE - 1) % BOARD_SIZE != BOARD_SIZE - 1)
                         MinesNearby++
-                    if (index - BOARD_SIZE + 1 < BOARD_SIZE* BOARD_SIZE && role[index - BOARD_SIZE + 1] == Field.BOMB && (index - BOARD_SIZE + 1) % BOARD_SIZE != 0)
+                    if (index - BOARD_SIZE + 1 < BOARD_SIZE * BOARD_SIZE && role[index - BOARD_SIZE + 1] == Field.BOMB && (index - BOARD_SIZE + 1) % BOARD_SIZE != 0)
                         MinesNearby++
                 }
 
-                if (index + BOARD_SIZE < BOARD_SIZE* BOARD_SIZE) { //нижняя полоса
+                if (index + BOARD_SIZE < BOARD_SIZE * BOARD_SIZE) { //нижняя полоса
                     if (role[index + BOARD_SIZE] == Field.BOMB)
                         MinesNearby++
-                    if (index + BOARD_SIZE - 1 > 0 && role[index + BOARD_SIZE - 1] == Field.BOMB && (index + BOARD_SIZE - 1) % BOARD_SIZE != BOARD_SIZE-1)
+                    if (index + BOARD_SIZE - 1 > 0 && role[index + BOARD_SIZE - 1] == Field.BOMB && (index + BOARD_SIZE - 1) % BOARD_SIZE != BOARD_SIZE - 1)
                         MinesNearby++
-                    if (index + BOARD_SIZE + 1 < BOARD_SIZE* BOARD_SIZE && role[index + BOARD_SIZE + 1] == Field.BOMB && (index + BOARD_SIZE + 1) % BOARD_SIZE != 0)
+                    if (index + BOARD_SIZE + 1 < BOARD_SIZE * BOARD_SIZE && role[index + BOARD_SIZE + 1] == Field.BOMB && (index + BOARD_SIZE + 1) % BOARD_SIZE != 0)
                         MinesNearby++
                 }
 
@@ -126,7 +123,7 @@ class Model {
         }
     }
 
-    private fun emptyCell(index: Int){
+    private fun emptyCell(index: Int) {
         cellOpen[index] = true
         if (index - BOARD_SIZE >= 0 && role[index] == Field.EMPTY) { //верхняя полоса
             if (role[index - BOARD_SIZE] != Field.BOMB && cellOpen[index - BOARD_SIZE]) { //если не бомба и не открыта
@@ -214,15 +211,4 @@ class Model {
             }
         }
     }
-}
-
-    private fun initBoard() {
-        MutableList(BOARD_SIZE) { Field.EMPTY }
-        var bombCounter = 0
-      /*  while (bombCounter < TOTAL_BOMBS){
-
-        }*/
-
-    }
-
 }
