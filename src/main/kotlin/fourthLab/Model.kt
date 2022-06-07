@@ -29,10 +29,8 @@ class Model(private val mazeModel: List<MutableList<Field>>) {
         override fun toString(): String = textValue
     }
 
-    private var state: Boolean
-    fun getState(): Boolean {
-        return state
-    }
+    var state: Boolean
+        private set
 
     private val mazeMap: List<MutableList<Field>> = mazeModel
     private var currY: Int

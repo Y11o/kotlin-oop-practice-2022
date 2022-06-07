@@ -13,7 +13,7 @@ class ConsoleUI(private val mazeModel: Model) {
 
     private fun repaint() {
         println(mazeModel)
-        if (mazeModel.getState())
+        if (mazeModel.state)
             println("Congratulations! You have reached the exit!")
     }
 }
