@@ -46,8 +46,10 @@ class Model {
         listeners.forEach { it.onModelChanged() }
     }
 
-    private val role = Array(BOARD_SIZE * BOARD_SIZE + 1) { Field.EMPTY }
+    val role = Array(BOARD_SIZE * BOARD_SIZE + 1) { Field.EMPTY }
     private val cellOpen = Array(BOARD_SIZE * BOARD_SIZE + 1) { false }
+    var state = State.MOVE_MODE
+        private  set
 
     private fun checkNumN(check: Int): Boolean {
         return check == 1 || check == 2 || check == 3 || check == 4 || check == 5 || check == 6 || check == 7 || check == 8
@@ -123,7 +125,7 @@ class Model {
         }
     }
 
-    private fun emptyCell(index: Int) {
+    fun emptyCell(index: Int) {
         cellOpen[index] = true
         if (index - BOARD_SIZE >= 0 && role[index] == Field.EMPTY) { //верхняя полоса
             if (role[index - BOARD_SIZE] != Field.BOMB && cellOpen[index - BOARD_SIZE]) { //если не бомба и не открыта

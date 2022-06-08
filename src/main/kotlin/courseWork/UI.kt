@@ -1,6 +1,7 @@
 package courseWork
 
 import java.awt.BorderLayout
+import java.awt.Color
 import java.awt.Component
 import java.awt.GridLayout
 import javax.swing.*
@@ -36,7 +37,7 @@ class UI: JFrame("Minesweeper"),ModelChangeListener {
             for (j in 0 until BOARD_SIZE) {
                 val cellButton = JButton("")
                 cellButton.addActionListener {
-                    gameModel.doMove(j, i)
+                    gameModel.emptyCell(i * j + 1)
                 }
                 buttonsRow.add(cellButton)
                 gamePanel.add(cellButton)
@@ -90,22 +91,28 @@ class UI: JFrame("Minesweeper"),ModelChangeListener {
 
     private fun updateGameUI() {
         val state = gameModel.state
-        statusLabel.text = state.textValue
+        statusLabel.text = state.toString()
 
-//        for ((i, buttonRow) in buttons.withIndex()) {
-//            for ((j, button) in buttonRow.withIndex()) {
-//                val cell = gameModel.board[i][j]
-//                button.text = cell.toString()
-//
-//                button.isEnabled = cell == Cell.EMPTY && state in GAME_NOT_FINISHED
-//                button.foreground = when (cell) {
-//                    Cell.X -> Color.BLUE
-//                    Cell.O -> Color.RED
-//                    Cell.EMPTY -> Color.BLACK
-//                }
-//            }
-//        }
+        for ((i, buttonRow) in buttons.withIndex()) {
+            for ((j, button) in buttonRow.withIndex()) {
+                val cell = gameModel.role[i * j +1]
+                button.text = cell.toString()
+
+                button.isEnabled = cell == Field.EMPTY && state in GAME_NOT_FINISHED
+                button.foreground = when (cell) {
+                    Field.EMPTY -> Color.GRAY
+                    Field.BOMB -> Color.RED
+                    Field.FLAG -> Color.CYAN
+                    Field.N_ONE -> Color.BLUE
+                    Field.N_TWO -> Color.GREEN
+                    Field.N_THREE -> Color.RED
+                    Field.N_FOUR -> Color.BLUE
+                    Field.N_FIVE -> Color.MAGENTA
+                    Field.N_SIX -> Color.PINK
+                    Field.N_SEVEN -> Color.ORANGE
+                    Field.N_EIGHT -> Color.YELLOW
+                }
+            }
+        }
     }
-
-
 }
