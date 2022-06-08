@@ -32,12 +32,12 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
     private fun createBoardPanel(): Component {
         val gamePanel = JPanel(GridLayout(BOARD_SIZE, BOARD_SIZE))
 
-        for (i in 1 until BOARD_SIZE + 1) {
+        for (i in 0 until BOARD_SIZE) {
             val buttonsRow = mutableListOf<JButton>()
-            for (j in 1 until BOARD_SIZE + 1) {
+            for (j in 0 until BOARD_SIZE) {
                 val cellButton = JButton("")
                 cellButton.addActionListener {
-                    gameModel.doMove(i * j)
+                    gameModel.doMove(i * BOARD_SIZE + j)
                     updateGameUI()
                 }
                 buttonsRow.add(cellButton)
@@ -109,7 +109,7 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
         if (state in GAME_NOT_FINISHED) {
             for ((i, buttonRow) in buttons.withIndex()) {
                 for ((j, button) in buttonRow.withIndex()) {
-                    val index = i * j
+                    val index = i * BOARD_SIZE + j
                     val cell = gameModel.cellOpen[index]
                     //button.isEnabled = cell == CellState.CLOSE
                     if (cell == CellState.CLOSE) {
@@ -132,7 +132,7 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
         if (state !in GAME_NOT_FINISHED) {
             for ((i, buttonRow) in buttons.withIndex()) {
                 for ((j, button) in buttonRow.withIndex()) {
-                    val index = i * j
+                    val index = i * BOARD_SIZE + j
                     val cell = gameModel.cellOpen[index]
                     button.text = cell.toString()
                     updateFont(button, 20.0f)
