@@ -120,6 +120,34 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
                     if (cell == CellState.OPEN) {
                         button.background = Color.LIGHT_GRAY
                         button.text = gameModel.role[index].textValue
+                        val currCell = gameModel.role[index]
+                        if(currCell != Field.EMPTY){
+                            button.background = Color.WHITE
+                            if (currCell == Field.N_ONE){
+                                button.foreground = Color.BLUE
+                            }
+                            if (currCell == Field.N_TWO){
+                                button.foreground = Color.GREEN
+                            }
+                            if (currCell == Field.N_THREE){
+                                button.foreground = Color.RED
+                            }
+                            if (currCell == Field.N_FOUR){
+                                button.foreground = Color.BLACK
+                            }
+                            if (currCell == Field.N_FIVE){
+                                button.foreground = Color.CYAN
+                            }
+                            if (currCell == Field.N_SIX){
+                                button.foreground = Color.PINK
+                            }
+                            if (currCell == Field.N_SEVEN){
+                                button.foreground = Color.ORANGE
+                            }
+                            if (currCell == Field.N_EIGHT){
+                                button.foreground = Color.MAGENTA
+                            }
+                        }
                         updateFont(button, 20.0f)
                     }
 //                    if (cell == CellState.FLAG){
@@ -137,6 +165,7 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
                     button.text = cell.toString()
                     updateFont(button, 20.0f)
                     button.background = Color.LIGHT_GRAY
+                    button.foreground = Color.BLACK
                     button.text = gameModel.role[index].textValue
                 }
             }

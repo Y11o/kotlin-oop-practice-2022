@@ -24,9 +24,9 @@ enum class CellState(val index: Int){
 }
 
 enum class State(val textValue: String) {
-    WIN("WIN"), //0x1F973
-    MOVE_MODE("MOVE"), //0x1F600
-    LOSE("LOSE"), //0x1F92F
+    WIN(getEmoji(0x1F60A)), //0x1F60A
+    MOVE_MODE(getEmoji(0x1F642)), //0x1F642
+    LOSE(getEmoji(0x1F612)), //0x1F612
     //FLAG_MODE("FLAG") //0x1F6A9
 }
 
