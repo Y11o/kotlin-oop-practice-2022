@@ -6,12 +6,12 @@ class Controller (private val model: Model) {
     }
 
     private fun startGame() {
-        while (model.state in GAME_NOT_FINISHED) {
+        while (model.state == State.MOVE_MODE) {
             val input = readln()
             try {
                 val col = input.substringBefore(" ").toInt() - 1
                 val row = input.substringAfter(" ").toInt() - 1
-                model.emptyCell(col * row + 1)
+                model.doMove(col * row )
             } catch (e: Exception) {
                 println(e.message)
             }
