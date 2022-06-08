@@ -24,10 +24,10 @@ enum class CellState(val index: Int){
 }
 
 enum class State(val textValue: String) {
-    WIN(getEmoji(0x1F973)),
-    MOVE_MODE(getEmoji(0x1F600)),
-    LOSE(getEmoji(0x1F92F)),
-    FLAG_MODE(getEmoji(0x1F6A9))
+    WIN("WIN"), //0x1F973
+    MOVE_MODE("MOVE"), //0x1F600
+    LOSE("LOSE"), //0x1F92F
+    FLAG_MODE("FLAG") //0x1F6A9
 }
 
 const val TOTAL_BOMBS = 10
@@ -36,7 +36,7 @@ interface ModelChangeListener {
     fun onModelChanged()
 }
 
-val GAME_NOT_FINISHED = setOf<State>(State.MOVE_MODE, State.FLAG_MODE)
+val GAME_NOT_FINISHED = setOf(State.MOVE_MODE, State.FLAG_MODE)
 
 class Model {
 

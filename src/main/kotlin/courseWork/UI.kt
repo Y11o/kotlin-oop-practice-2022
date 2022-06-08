@@ -12,7 +12,7 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
     private var gameModel: Model = Model()
     private val statusLabel = JLabel("Status", JLabel.CENTER)
     private val buttons = mutableListOf<MutableList<JButton>>()
-    private var textMode = gameModel.state.textValue
+
     init {
         setSize(1000, 1000)
         defaultCloseOperation = EXIT_ON_CLOSE
@@ -38,10 +38,10 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
                 val cellButton = JButton("")
                 cellButton.addActionListener {
                     gameModel.doMove(i * j)
+                    updateGameUI()
                 }
                 buttonsRow.add(cellButton)
                 gamePanel.add(cellButton)
-                updateFont(cellButton, 5.0f)
             }
             buttons.add(buttonsRow)
         }
@@ -56,11 +56,17 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
     }
 
     private fun createModeChanger(): JButton {
-        val modChanger = JButton(textMode)
+        val modChanger = JButton(gameModel.state.textValue)
         updateFont(modChanger, 20.0f)
         modChanger.addActionListener{
-            if (gameModel.state == State.MOVE_MODE) gameModel.state = State.FLAG_MODE
-            if (gameModel.state == State.FLAG_MODE) gameModel.state = State.MOVE_MODE
+            if (gameModel.state == State.MOVE_MODE) {
+                gameModel.state = State.FLAG_MODE
+                modChanger.text = gameModel.state.textValue
+            }
+            if (gameModel.state == State.FLAG_MODE){
+                gameModel.state = State.MOVE_MODE
+                modChanger.text = gameModel.state.textValue
+            }
             onModelChanged()
         }
         return modChanger
@@ -100,22 +106,25 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
     private fun updateGameUI() {
         val state = gameModel.state
         statusLabel.text = state.textValue
-        textMode = state.textValue
         if (state in GAME_NOT_FINISHED) {
             for ((i, buttonRow) in buttons.withIndex()) {
                 for ((j, button) in buttonRow.withIndex()) {
                     val index = i * j
                     val cell = gameModel.cellOpen[index]
-                    button.isEnabled = cell == CellState.CLOSE
+                    //button.isEnabled = cell == CellState.CLOSE
                     if (cell == CellState.CLOSE) {
-                        //button.background = Color.LIGHT_GRAY
+                        button.background = Color.LIGHT_GRAY
                         button.text = " "
                         updateFont(button, 20.0f)
                     }
-                    if (cell == CellState.FLAG || cell == CellState.OPEN) {
-                       //button.background = Color.LIGHT_GRAY
+                    if (cell == CellState.OPEN) {
+                        button.background = Color.LIGHT_GRAY
                         button.text = gameModel.role[index].textValue
                         updateFont(button, 20.0f)
+                    }
+                    if (cell == CellState.FLAG){
+                        button.background = Color.LIGHT_GRAY
+                        button.text = State.FLAG_MODE.textValue
                     }
                 }
             }
@@ -127,8 +136,8 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
                     val cell = gameModel.cellOpen[index]
                     button.text = cell.toString()
                     updateFont(button, 20.0f)
-                    button.isEnabled = false
-                    //button.background = Color.LIGHT_GRAY
+                    //button.isEnabled = false
+                    button.background = Color.LIGHT_GRAY
                     button.text = gameModel.role[index].textValue
                 }
             }
