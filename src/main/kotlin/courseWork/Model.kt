@@ -20,14 +20,14 @@ enum class Field(val textValue: String) {
 enum class CellState(val index: Int){
     CLOSE(0),
     OPEN(1),
-    FLAG(2)
+    //FLAG(2)
 }
 
 enum class State(val textValue: String) {
     WIN("WIN"), //0x1F973
     MOVE_MODE("MOVE"), //0x1F600
     LOSE("LOSE"), //0x1F92F
-    FLAG_MODE("FLAG") //0x1F6A9
+    //FLAG_MODE("FLAG") //0x1F6A9
 }
 
 const val TOTAL_BOMBS = 10
@@ -36,7 +36,9 @@ interface ModelChangeListener {
     fun onModelChanged()
 }
 
-val GAME_NOT_FINISHED = setOf(State.MOVE_MODE, State.FLAG_MODE)
+val GAME_NOT_FINISHED = setOf(State.MOVE_MODE/*, State.FLAG_MODE*/)
+
+private val FIRST_MOVE = State.MOVE_MODE
 
 class Model {
 
@@ -44,7 +46,12 @@ class Model {
         private set
     var cellOpen = Array(BOARD_SIZE * BOARD_SIZE + 1) { CellState.CLOSE }
         private set
-    var state = State.MOVE_MODE
+    var state: State = FIRST_MOVE
+        private set
+
+//    fun stateChanger(newState: State){
+//        state = newState
+//    }
 
     private var flagsCounter = 0
     init {
@@ -228,6 +235,16 @@ class Model {
         }
     }
 
+    private fun checkState(){
+        var emptyCounter = 0
+        for (index in 0 until BOARD_SIZE* BOARD_SIZE){
+            if (cellOpen[index] == CellState.CLOSE){
+                if (role[index] != Field.BOMB) emptyCounter++
+            }
+        }
+        if (emptyCounter == 0) state = State.WIN
+    }
+
     fun doMove(index: Int){
         if (state == State.MOVE_MODE){
             if (cellOpen[index] == CellState.CLOSE){
@@ -238,17 +255,19 @@ class Model {
                     else cellOpen[index] = CellState.OPEN
                 }
             }
+            checkState()
         }
-        if (state == State.FLAG_MODE){
-            if(cellOpen[index] == CellState.CLOSE) {
-                cellOpen[index] = CellState.FLAG
-                if (role[index] == Field.BOMB) flagsCounter++
-                if (flagsCounter == TOTAL_BOMBS) state = State.WIN
-            }
-            if (cellOpen[index] == CellState.FLAG){
-                cellOpen[index] = CellState.CLOSE
-                if (role[index] == Field.BOMB) flagsCounter--
-            }
-        }
+//        if (state == State.FLAG_MODE){
+//            if(cellOpen[index] == CellState.CLOSE) {
+//                cellOpen[index] = CellState.FLAG
+//                if (role[index] == Field.BOMB) flagsCounter++
+//                if (flagsCounter == TOTAL_BOMBS) state = State.WIN
+//            }
+//            if (cellOpen[index] == CellState.FLAG){
+//                cellOpen[index] = CellState.CLOSE
+//                if (role[index] == Field.BOMB) flagsCounter--
+//            }
+//        }
+        notifyListeners()
     }
 }

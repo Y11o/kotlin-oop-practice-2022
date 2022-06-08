@@ -23,7 +23,7 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
             add(statusLabel, BorderLayout.NORTH)
             add(createBoardPanel(), BorderLayout.CENTER)
             add(createRestartButton(), BorderLayout.SOUTH)
-            add(createModeChanger(), BorderLayout.WEST)
+            //add(createModeChanger(), BorderLayout.WEST)
             border = BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP)
         }
         resubscribe()
@@ -55,24 +55,23 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
         updateGameUI()
     }
 
-    private fun createModeChanger(): JButton {
-        val modChanger = JButton(gameModel.state.textValue)
-        updateFont(modChanger, 20.0f)
-        modChanger.addActionListener{
-            if (gameModel.state == State.MOVE_MODE) {
-                gameModel.state = State.FLAG_MODE
-                modChanger.text = gameModel.state.textValue
-                updateGameUI()
-            }
-            if (gameModel.state == State.FLAG_MODE){
-                gameModel.state = State.MOVE_MODE
-                modChanger.text = gameModel.state.textValue
-                updateGameUI()
-            }
-            onModelChanged()
-        }
-        return modChanger
-    }
+//    private fun createModeChanger(): Component {
+//        val modChanger = JButton(gameModel.state.textValue)
+//        updateFont(modChanger, 20.0f)
+//        modChanger.addActionListener{
+//            if (gameModel.state == State.MOVE_MODE) {
+//                gameModel.stateChanger(State.FLAG_MODE)
+//                modChanger.text = gameModel.state.textValue
+//                updateGameUI()
+//            }
+//            if (gameModel.state == State.FLAG_MODE){
+//                gameModel.stateChanger(State.MOVE_MODE)
+//                modChanger.text = gameModel.state.textValue
+//                updateGameUI()
+//            }
+//        }
+//        return modChanger
+//    }
 
     private fun createRestartButton(): Component {
         val restartButton = JButton("Restart")
@@ -123,10 +122,10 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
                         button.text = gameModel.role[index].textValue
                         updateFont(button, 20.0f)
                     }
-                    if (cell == CellState.FLAG){
-                        button.background = Color.LIGHT_GRAY
-                        button.text = State.FLAG_MODE.textValue
-                    }
+//                    if (cell == CellState.FLAG){
+//                        button.background = Color.LIGHT_GRAY
+//                        button.text = State.FLAG_MODE.textValue
+//                    }
                 }
             }
         }
