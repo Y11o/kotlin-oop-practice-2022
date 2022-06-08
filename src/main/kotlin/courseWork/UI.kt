@@ -62,10 +62,12 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
             if (gameModel.state == State.MOVE_MODE) {
                 gameModel.state = State.FLAG_MODE
                 modChanger.text = gameModel.state.textValue
+                updateGameUI()
             }
             if (gameModel.state == State.FLAG_MODE){
                 gameModel.state = State.MOVE_MODE
                 modChanger.text = gameModel.state.textValue
+                updateGameUI()
             }
             onModelChanged()
         }
@@ -111,9 +113,8 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
                 for ((j, button) in buttonRow.withIndex()) {
                     val index = i * BOARD_SIZE + j
                     val cell = gameModel.cellOpen[index]
-                    //button.isEnabled = cell == CellState.CLOSE
                     if (cell == CellState.CLOSE) {
-                        button.background = Color.LIGHT_GRAY
+                        button.background = Color.GRAY
                         button.text = " "
                         updateFont(button, 20.0f)
                     }
@@ -136,7 +137,6 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
                     val cell = gameModel.cellOpen[index]
                     button.text = cell.toString()
                     updateFont(button, 20.0f)
-                    //button.isEnabled = false
                     button.background = Color.LIGHT_GRAY
                     button.text = gameModel.role[index].textValue
                 }
