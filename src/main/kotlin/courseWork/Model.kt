@@ -30,8 +30,6 @@ enum class State(val textValue: String) {
     //FLAG_MODE("FLAG") //0x1F6A9
 }
 
-const val TOTAL_BOMBS = 10
-const val BOARD_SIZE = 10
 interface ModelChangeListener {
     fun onModelChanged()
 }
@@ -40,11 +38,14 @@ val GAME_NOT_FINISHED = setOf(State.MOVE_MODE/*, State.FLAG_MODE*/)
 
 private val FIRST_MOVE = State.MOVE_MODE
 
-class Model {
+class Model(_board_size: Int, _cnt_num: Int) {
 
-    var role = Array(BOARD_SIZE * BOARD_SIZE + 1) { Field.EMPTY }
+    TOTAL_BOMBS = _cnt_num
+    BOARD_SIZE = _board_size
+
+    var role = Array(BOARD_SIZE * BOARD_SIZE) { Field.EMPTY }
         private set
-    var cellOpen = Array(BOARD_SIZE * BOARD_SIZE + 1) { CellState.CLOSE }
+    var cellOpen = Array(BOARD_SIZE * BOARD_SIZE) { CellState.CLOSE }
         private set
     var state: State = FIRST_MOVE
         private set
@@ -148,6 +149,7 @@ class Model {
 
     private fun emptyCell(index: Int) {
         cellOpen[index] = CellState.OPEN
+
         if (index - BOARD_SIZE >= 0 && role[index] == Field.EMPTY) { //верхняя полоса
             if (role[index - BOARD_SIZE] != Field.BOMB && (cellOpen[index - BOARD_SIZE] == CellState.OPEN)) { //если не бомба и не открыта
                 if (checkNumF(role[index - BOARD_SIZE])) //если число
@@ -161,21 +163,21 @@ class Model {
 
             if (index - BOARD_SIZE - 1 > 0 && (index - BOARD_SIZE - 1) % BOARD_SIZE != BOARD_SIZE - 1 && role[index - BOARD_SIZE - 1] != Field.BOMB && cellOpen[index - BOARD_SIZE - 1] == CellState.CLOSE) { //если не бомба и не открыта
                 if (checkNumF(role[index - BOARD_SIZE - 1])) //если число
-                    cellOpen[index - BOARD_SIZE - 1] = CellState.OPEN;
+                    cellOpen[index - BOARD_SIZE - 1] = CellState.OPEN
                 else {
                     if (role[index - BOARD_SIZE - 1] == Field.EMPTY) //если пустая клетка
-                        cellOpen[index - BOARD_SIZE - 1] = CellState.OPEN; //открываем клетку
-                    emptyCell(index - BOARD_SIZE - 1);
+                        cellOpen[index - BOARD_SIZE - 1] = CellState.OPEN //открываем клетку
+                    emptyCell(index - BOARD_SIZE - 1)
                 }
             }
 
             if (role[index - BOARD_SIZE + 1] != Field.BOMB && index - BOARD_SIZE + 1 < BOARD_SIZE * BOARD_SIZE && cellOpen[index - BOARD_SIZE + 1] == CellState.CLOSE && (index - BOARD_SIZE + 1) % BOARD_SIZE != 0) { //если не бомба и не открыта
                 if (checkNumF(role[index - BOARD_SIZE + 1])) //если число
-                    cellOpen[index - BOARD_SIZE + 1] = CellState.OPEN;
+                    cellOpen[index - BOARD_SIZE + 1] = CellState.OPEN
                 else {
                     if (role[index - BOARD_SIZE + 1] == Field.EMPTY) //если пустая клетка
-                        cellOpen[index - BOARD_SIZE + 1] = CellState.OPEN; //открываем клетку
-                    emptyCell(index - BOARD_SIZE + 1);
+                        cellOpen[index - BOARD_SIZE + 1] = CellState.OPEN //открываем клетку
+                    emptyCell(index - BOARD_SIZE + 1)
                 }
             }
         }
@@ -183,29 +185,31 @@ class Model {
         if (index + BOARD_SIZE < BOARD_SIZE * BOARD_SIZE && role[index] == Field.EMPTY) { //нижняя полоса
             if (role[index + BOARD_SIZE] != Field.BOMB && cellOpen[index + BOARD_SIZE] == CellState.CLOSE) { //если не бомба и не открыта
                 if (checkNumF(role[index + BOARD_SIZE])) //если число
-                    cellOpen[index + BOARD_SIZE] = CellState.OPEN;
+                    cellOpen[index + BOARD_SIZE] = CellState.OPEN
                 else {
                     if (role[index + BOARD_SIZE] == Field.EMPTY) //если пустая клетка
-                        cellOpen[index + BOARD_SIZE] = CellState.OPEN; //открываем клетку
-                    emptyCell(index + BOARD_SIZE);
+                        cellOpen[index + BOARD_SIZE] = CellState.OPEN //открываем клетку
+                    emptyCell(index + BOARD_SIZE)
                 }
             }
+
             if (role[index + BOARD_SIZE - 1] != Field.BOMB && index + BOARD_SIZE - 1 > 0 && (index + BOARD_SIZE - 1) % BOARD_SIZE != BOARD_SIZE - 1 && cellOpen[index + BOARD_SIZE - 1] == CellState.CLOSE) { //если не бомба и не открыта
                 if (checkNumF(role[index + BOARD_SIZE - 1])) //если число
-                    cellOpen[index + BOARD_SIZE - 1] = CellState.OPEN;
+                    cellOpen[index + BOARD_SIZE - 1] = CellState.OPEN
                 else {
                     if (role[index + BOARD_SIZE - 1] == Field.EMPTY) //если пустая клетка
-                        cellOpen[index + BOARD_SIZE - 1] = CellState.OPEN; //открываем клетку
-                    emptyCell(index + BOARD_SIZE - 1);
+                        cellOpen[index + BOARD_SIZE - 1] = CellState.OPEN //открываем клетку
+                    emptyCell(index + BOARD_SIZE - 1)
                 }
             }
+
             if (role[index + BOARD_SIZE + 1] != Field.BOMB && index + BOARD_SIZE + 1 < BOARD_SIZE * BOARD_SIZE && (index + BOARD_SIZE + 1) % BOARD_SIZE != 0 && cellOpen[index + BOARD_SIZE + 1] == CellState.CLOSE) { //если не бомба и не октрыта
                 if (checkNumF(role[index + BOARD_SIZE + 1])) //если число
-                    cellOpen[index + BOARD_SIZE + 1] = CellState.OPEN;
+                    cellOpen[index + BOARD_SIZE + 1] = CellState.OPEN
                 else {
                     if (role[index + BOARD_SIZE + 1] == Field.EMPTY) //если пустая клетка
-                        cellOpen[index + BOARD_SIZE + 1] = CellState.OPEN; //открываем клетку
-                    emptyCell(index + BOARD_SIZE + 1);
+                        cellOpen[index + BOARD_SIZE + 1] = CellState.OPEN //открываем клетку
+                    emptyCell(index + BOARD_SIZE + 1)
                 }
             }
         }
@@ -213,23 +217,24 @@ class Model {
             if (role[index - 1] != Field.BOMB && cellOpen[index - 1] == CellState.CLOSE) //если не бомба и не открыта
             {
                 if (checkNumF(role[index - 1])) //если число
-                    cellOpen[index - 1] = CellState.OPEN;
+                    cellOpen[index - 1] = CellState.OPEN
                 else {
                     if (role[index - 1] == Field.EMPTY) //если пустая клетка
-                        cellOpen[index - 1] = CellState.OPEN; //открываем клетку
-                    emptyCell(index - 1);
+                        cellOpen[index - 1] = CellState.OPEN //открываем клетку
+                    emptyCell(index - 1)
                 }
             }
         }
+
         if (index + 1 < BOARD_SIZE * BOARD_SIZE && (index + 1) % BOARD_SIZE != 0 && role[index] == Field.EMPTY) { //правая полоса
             if (role[index + 1] != Field.BOMB && cellOpen[index + 1] == CellState.CLOSE) //если не бомба и не открыта
             {
                 if (checkNumF(role[index + 1])) //если число
-                    cellOpen[index + 1] = CellState.OPEN;
+                    cellOpen[index + 1] = CellState.OPEN
                 else {
                     if (role[index + 1] == Field.EMPTY) //если пустая клетка
-                        cellOpen[index + 1] = CellState.OPEN; //открываем клетку
-                    emptyCell(index + 1);
+                        cellOpen[index + 1] = CellState.OPEN //открываем клетку
+                    emptyCell(index + 1)
                 }
             }
         }

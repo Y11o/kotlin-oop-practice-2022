@@ -8,10 +8,14 @@ import javax.swing.*
 
 private const val GAP = 10
 
-class UI : JFrame("Minesweeper"), ModelChangeListener {
-    private var gameModel: Model = Model()
+class UI(_board_size: Int, _cnt_num: Int) : JFrame("Minesweeper"), ModelChangeListener {
+    private val BOARD_SIZE = _board_size
+    private val cnt_num = _cnt_num
+
+    private var gameModel: Model = Model(BOARD_SIZE, cnt_num)
     private val statusLabel = JLabel("Status", JLabel.CENTER)
     private val buttons = mutableListOf<MutableList<JButton>>()
+
 
     init {
         setSize(1000, 1000)
@@ -27,6 +31,7 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
             border = BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP)
         }
         resubscribe()
+
     }
 
     private fun createBoardPanel(): Component {
@@ -36,6 +41,7 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
             val buttonsRow = mutableListOf<JButton>()
             for (j in 0 until BOARD_SIZE) {
                 val cellButton = JButton("")
+
                 cellButton.addActionListener {
                     gameModel.doMove(i * BOARD_SIZE + j)
                     updateGameUI()
@@ -50,7 +56,7 @@ class UI : JFrame("Minesweeper"), ModelChangeListener {
 
     private fun resubscribe() {
         gameModel.removeModelChangeListener(this)
-        gameModel = Model()
+        gameModel = Model(BOARD_SIZE, cnt_num)
         gameModel.addModelChangeListener(this)
         updateGameUI()
     }
