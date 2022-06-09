@@ -40,8 +40,8 @@ private val FIRST_MOVE = State.MOVE_MODE
 
 class Model(_board_size: Int, _cnt_num: Int) {
 
-    TOTAL_BOMBS = _cnt_num
-    BOARD_SIZE = _board_size
+    private val TOTAL_BOMBS = _cnt_num
+    private val BOARD_SIZE = _board_size
 
     var role = Array(BOARD_SIZE * BOARD_SIZE) { Field.EMPTY }
         private set
