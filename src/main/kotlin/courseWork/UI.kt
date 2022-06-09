@@ -83,7 +83,7 @@ class UI(_board_size: Int, _cnt_num: Int) : JFrame("Minesweeper"), ModelChangeLi
         val restartButton = JButton("Restart")
         updateFont(restartButton, 20.0f)
         restartButton.addActionListener {
-            if (gameModel.state in GAME_NOT_FINISHED) {
+            if (gameModel.state !in GAME_FINISHED) {
                 val dialogOption = JOptionPane.showConfirmDialog(
                     this,
                     "Game not finished, are you sure?",
@@ -113,7 +113,7 @@ class UI(_board_size: Int, _cnt_num: Int) : JFrame("Minesweeper"), ModelChangeLi
     private fun updateGameUI() {
         val state = gameModel.state
         statusLabel.text = state.textValue
-        if (state in GAME_NOT_FINISHED) {
+        if (state !in GAME_FINISHED) {
             for ((i, buttonRow) in buttons.withIndex()) {
                 for ((j, button) in buttonRow.withIndex()) {
                     val index = i * BOARD_SIZE + j
@@ -163,7 +163,7 @@ class UI(_board_size: Int, _cnt_num: Int) : JFrame("Minesweeper"), ModelChangeLi
                 }
             }
         }
-        if (state !in GAME_NOT_FINISHED) {
+        if (state in GAME_FINISHED) {
             for ((i, buttonRow) in buttons.withIndex()) {
                 for ((j, button) in buttonRow.withIndex()) {
                     val index = i * BOARD_SIZE + j

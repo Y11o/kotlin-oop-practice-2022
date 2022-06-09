@@ -34,7 +34,7 @@ interface ModelChangeListener {
     fun onModelChanged()
 }
 
-val GAME_NOT_FINISHED = setOf(State.MOVE_MODE/*, State.FLAG_MODE*/)
+val GAME_FINISHED = setOf(State.WIN, State.LOSE)
 
 private val FIRST_MOVE = State.MOVE_MODE
 

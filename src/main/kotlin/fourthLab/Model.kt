@@ -32,9 +32,10 @@ class Model(private val mazeModel: List<MutableList<Field>>) {
     var state: Boolean
         private set
 
-    private val mazeMap: List<MutableList<Field>> = mazeModel
     private var currY: Int
     private var currX: Int
+    private var mazeMap: List<MutableList<Field>> = mazeModel
+        private set
 
     init {
         currY = -1
